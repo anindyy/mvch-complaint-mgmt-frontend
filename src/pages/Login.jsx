@@ -1,12 +1,18 @@
 import React from "react";
 import { Button, Typography, TextField, Container, Box } from "@mui/material";
+import axios from "axios";
 
-function User() {
-  const handleSubmit = (event) => {
+const baseUrl = "http://localhost:8000";
+
+function Login() {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("email"));
-    console.log(data.get("password"));
+    const email = data.get("email");
+    const password = data.get("password");
+    const res = await axios.post(`${baseUrl}/user/login`, { email, password });
+    console.log('******')
+    console.log(res)
   };
 
   return (
@@ -51,4 +57,4 @@ function User() {
   );
 }
 
-export default User;
+export default Login;
