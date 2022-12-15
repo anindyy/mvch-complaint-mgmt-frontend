@@ -10,9 +10,14 @@ function Login() {
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    const res = await axios.post(`${baseUrl}/user/login`, { email, password });
-    console.log('******')
-    console.log(res)
+    try {
+      const res = await axios.post(`${baseUrl}/user/login`, {
+        email,
+        password,
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
