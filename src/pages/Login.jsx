@@ -1,23 +1,19 @@
 import React from "react";
 import { Button, Typography, TextField, Container, Box } from "@mui/material";
-import axios from "axios";
-
-const baseUrl = "http://localhost:8000";
+import { login } from "../api/user";
+import { useCookies } from "react-cookie";
+import config from "../config";
 
 function Login() {
+  const [cookies, setCookie, removeCookie] = useCookies([config.cookieName]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    try {
-      const res = await axios.post(`${baseUrl}/user/login`, {
-        email,
-        password,
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
+    const { token } = await login({ email, password });
+    setCookie(config.cookieName, token);
   };
 
   return (
