@@ -7,11 +7,11 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import axios from "axios";
-
-const baseUrl = "http://localhost:8000";
+import { useAuth } from "../hooks/useAuth";
 
 function Signup() {
+  const { onSignup } = useAuth();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,8 +21,7 @@ function Signup() {
       body[key] = value;
     }
     try {
-      const res = await axios.post(`${baseUrl}/user/register`, body);
-      console.log(res);
+      await onSignup(body)
     } catch (err) {
       console.log(err.message);
     }

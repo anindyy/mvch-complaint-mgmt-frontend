@@ -10,7 +10,7 @@ import Form from './pages/Form';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
-import { login } from './api/user';
+import { login, register } from './api/user';
 import config from './config';
 
 export const AuthContext = React.createContext(null)
@@ -52,10 +52,18 @@ const AuthProvider = ({ children }) => {
     removeCookie(config.cookieName);
   };
 
+  const handleSignup = async (body) => {
+    const { token } = await register(body);
+    setToken(token);
+    setCookie(config.cookieName, token);
+    navigate('/home');
+  }
+
   const value = {
     token,
     onLogin: handleLogin,
     onLogout: handleLogout,
+    onSignup: handleSignup
   }
 
   return (
