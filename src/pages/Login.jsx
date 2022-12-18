@@ -1,19 +1,17 @@
 import React from "react";
 import { Button, Typography, TextField, Container, Box } from "@mui/material";
-import { login } from "../api/user";
-import { useCookies } from "react-cookie";
-import config from "../config";
+import { useAuth } from "../hooks/useAuth";
 
 function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies([config.cookieName]);
+
+  const { onLogin } = useAuth()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    const { token } = await login({ email, password });
-    setCookie(config.cookieName, token);
+    await onLogin({ email, password })
   };
 
   return (
