@@ -3,6 +3,7 @@ import React from "react";
 import { Stack, Card, Box, Container, Typography } from "@mui/material";
 
 import { TextField, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 class Home extends React.Component {
   render() {
@@ -20,7 +21,7 @@ class Home extends React.Component {
 
           <Card>
             <Stack>
-              <Button variant="contained" sx={{ py: 3 }}>
+              <Button href="/form" variant="contained" sx={{ py: 3 }}>
                 Submit New Complaint
               </Button>
             </Stack>
