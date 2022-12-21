@@ -39,7 +39,7 @@ class Home extends React.Component {
                 size="small"
                 label="Complaint Number"
               />
-              <Button variant="contained">View</Button>
+              <Button variant="contained" >View</Button>
             </Stack>
           </Card>
         </Stack>

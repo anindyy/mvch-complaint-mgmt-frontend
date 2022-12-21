@@ -15,7 +15,7 @@ import {
 class TopBar extends React.Component {
   render() {
     return (
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, py: 1, bgcolor: "black" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 1.5, bgcolor: "black" }}>
         <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center" }}>
           <Link variant="body1" href="/home" underline="none" sx={{ color: "white" }}>
             <b>MVCH Complaint Service</b>

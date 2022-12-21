@@ -77,20 +77,20 @@ const AuthProvider = ({ children }) => {
 function App() {
   return (
     <>
-    <TopBar />
-    <AuthProvider>
-      <div className="App">
-        <Routes>
-          <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-          <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-          <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-          <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </AuthProvider>
+      <TopBar />
+      <AuthProvider>
+          <div className="App">
+            <Routes>
+              <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+              <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+      </AuthProvider>
     </>
 
   );
