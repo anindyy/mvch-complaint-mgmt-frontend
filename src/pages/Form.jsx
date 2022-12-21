@@ -2,17 +2,34 @@ import React from "react";
 
 import {
   Stack,
-  Card,
   Box,
-  Container,
   Typography,
   Autocomplete,
   TextField,
-  Button 
+  Button
 } from "@mui/material";
 
 class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { fileName: "", fileSize: "" };
+  }
+
+  onUpload = (event) => {
+    let sizeInKB = event.target.files[0].size * 0.0009765625;
+    let strSize = `${Number(sizeInKB.toFixed(0))} KB`
+    if (sizeInKB > 1000) {
+      let sizeInMB = sizeInKB * 0.0009765625
+      strSize = `${Number(sizeInMB.toFixed(2))} MB`
+    }
+    this.setState({
+      fileName: event.target.files[0].name,
+      fileSize: strSize,
+    });
+  };
+
   render() {
+    const { fileName, fileSize } = this.state;
     return (
       <Box p={6}>
         <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
@@ -75,8 +92,9 @@ class Form extends React.Component {
 
           <Button variant="outlined" component="label">
             Upload File
-            <input type="file" hidden />
+            <input type="file" onChange={this.onUpload} hidden />
           </Button>
+          {!!fileName && `${fileName} (${fileSize})`}
         </Stack>
       </Box>
     );

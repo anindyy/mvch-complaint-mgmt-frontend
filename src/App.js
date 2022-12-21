@@ -10,6 +10,7 @@ import Form from './pages/Form';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
 import { login, register } from './api/user';
 import config from './config';
 
@@ -87,6 +88,7 @@ function App() {
           <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
