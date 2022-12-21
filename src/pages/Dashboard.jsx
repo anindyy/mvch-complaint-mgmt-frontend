@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchAllComplaints } from "../api/complaints";
@@ -7,6 +7,11 @@ import { complaintColumns } from "../constants";
 function Dashboard() {
   const [complaints, setComplaints] = useState([]);
   const [query, setQuery] = useState("");
+  const display = useMemo(() => {
+    return complaints.filter((x) =>
+      x.description.toLowerCase().includes(query)
+    );
+  }, [query, complaints]);
 
   const fetch = async () => {
     const { response } = await fetchAllComplaints();
@@ -50,7 +55,7 @@ function Dashboard() {
         <TextField
           value={query}
           onChange={handleChange}
-          placeholder="Search complaint"
+          placeholder="Search complaint by description"
           sx={{ width: "35%", height: "1rem" }}
         />
       </Box>
@@ -58,7 +63,7 @@ function Dashboard() {
         {complaints.length > 0 && (
           <DataGrid
             columns={complaintColumns}
-            rows={complaints}
+            rows={query == "" ? complaints : display}
             rowHeight={48}
           />
         )}
