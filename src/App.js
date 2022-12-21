@@ -9,6 +9,7 @@ import Form from './pages/Form';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
 import { login, register } from './api/user';
 import config from './config';
 import View from './pages/View';
@@ -91,12 +92,12 @@ function App() {
               <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
               <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
       </AuthProvider>
     </>
-
   );
 }
 
