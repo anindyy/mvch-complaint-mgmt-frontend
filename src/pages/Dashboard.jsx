@@ -45,12 +45,12 @@ function Dashboard() {
         width="95%"
       >
         <Typography
-          variant="h6"
+          variant="h5"
           component="h1"
           align="left"
           sx={{ marginTop: 2, marginBottom: 2 }}
         >
-          Complaint List
+          <b>Complaint List</b>
         </Typography>
         <TextField
           value={query}
@@ -59,7 +59,7 @@ function Dashboard() {
           sx={{ width: "35%", height: "1rem" }}
         />
       </Box>
-      <Box height="80vh" width="95%">
+      <Box height="83vh" width="95%">
         {complaints.length > 0 && (
           <DataGrid
             columns={complaintColumns}
