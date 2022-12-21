@@ -94,7 +94,9 @@ function View() {
               spacing={1}
               sx={{ display: "flex", alignItems: "flex-start" }}
             >
-              <Typography variant="body2">Jane Doe / 11 Apr 2022</Typography>
+              <Typography variant="body2">
+                {complaint.sender} / {complaint.createdAt}
+              </Typography>
               <Grid container justify="space-between" alignItems="stretch">
                 <Grid item xs sx={{ display: "flex", flexDirection: "column" }}>
                   <Card sx={{ p: 3, mr: 2, textAlign: "left", height: "100%" }}>
@@ -123,10 +125,11 @@ function View() {
                       <br />
                       {complaint.createdAt}
                     </Typography>
+                    <br />
                     <Typography variant="body1">
-                      <b>Incident status:</b>
+                      <b>Incident type:</b>
                       <br />
-                      {"Aduh apaya"}
+                      {complaint.type}
                     </Typography>
                     <br />
                     <Typography variant="body1">
@@ -137,7 +140,7 @@ function View() {
                     <Typography variant="body1">
                       <b>Affected party:</b> <br />
                       {complaint.nameAffected}{" "}
-                      {complaint.selfAffected && "(self-affected)"}
+                      {complaint.selfAffected == "yes" && "(self-affected)"}
                     </Typography>
                     <br />
                     <Typography variant="body1">
@@ -152,53 +155,37 @@ function View() {
             <Typography variant="h6">
               <b>Replies</b>
             </Typography>
-            <Grid container sx={{ display: "flex", width: "100%" }}>
-              <Grid
-                item
-                xs={12}
-                mb={4}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                <Typography variant="body2" alignSelf="flex-start">
-                  Jane Doe / 11 Apr 2022
-                </Typography>
-                <Box
-                  sx={{
-                    mt: 1,
-                    display: "flex",
-                    alignItems: "flex-start",
-                    width: "100%",
-                  }}
-                >
-                  <Card sx={{ p: 2, width: "100%", textAlign: "left" }}>
-                    Reply content
-                  </Card>
-                </Box>
+            {complaint.complainReplies &&
+            complaint.complainReplies.length > 0 ? (
+              <Grid container sx={{ display: "flex", width: "100%" }}>
+                {complaint.complainReplies.map((reply) => (
+                  <Grid
+                    item
+                    xs={12}
+                    mb={4}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <Typography variant="body2" alignSelf="flex-start">
+                      {reply.senderName} / {reply.createdAt}
+                    </Typography>
+                    <Box
+                      sx={{
+                        mt: 1,
+                        display: "flex",
+                        alignItems: "flex-start",
+                        width: "100%",
+                      }}
+                    >
+                      <Card sx={{ p: 2, width: "100%", textAlign: "left" }}>
+                        {reply.content}
+                      </Card>
+                    </Box>
+                  </Grid>
+                ))}
               </Grid>
-
-              <Grid
-                item
-                xs={12}
-                mb={4}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                <Typography variant="body2" alignSelf="flex-start">
-                  Jane Doe / 11 Apr 2022
-                </Typography>
-                <Box
-                  sx={{
-                    mt: 1,
-                    display: "flex",
-                    alignItems: "flex-start",
-                    width: "100%",
-                  }}
-                >
-                  <Card sx={{ p: 2, width: "100%", textAlign: "left" }}>
-                    Reply content
-                  </Card>
-                </Box>
-              </Grid>
-            </Grid>
+            ) : (
+              <>No replies yet</>
+            )}
 
             {/* Writing a reply */}
             <Box
