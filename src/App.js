@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound';
 import { login, register } from './api/user';
 import config from './config';
 import View from './pages/View';
+import TopBar from './component/TopBar';
 
 export const AuthContext = React.createContext(null)
 
@@ -75,6 +76,8 @@ const AuthProvider = ({ children }) => {
 
 function App() {
   return (
+    <>
+    <TopBar />
     <AuthProvider>
       <div className="App">
         <Routes>
@@ -88,6 +91,8 @@ function App() {
         </Routes>
       </div>
     </AuthProvider>
+    </>
+
   );
 }
 

@@ -9,6 +9,7 @@ import {
   TextField,
   Button 
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 class Form extends React.Component {
   render() {
@@ -26,9 +27,9 @@ class Form extends React.Component {
           </Typography>
 
           <TextField fullWidth label="Email" />
-          <Typography variant="body2">
-            Looks like you have filled our form before.
-            <Button variant="text">Should we load your biodata?</Button>
+          <Typography variant="body2" textAlign="left">
+            Looks like you have filled our form before. <br />
+            <Link variant="body2" color="blue">Should we load your biodata?</Link>
           </Typography>
 
           <Typography variant="h6">
