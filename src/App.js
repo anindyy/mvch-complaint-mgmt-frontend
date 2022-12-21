@@ -91,7 +91,7 @@ function App() {
               <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
               <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-              <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>

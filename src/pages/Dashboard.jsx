@@ -3,10 +3,13 @@ import { Box, Typography, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchAllComplaints } from "../api/complaints";
 import { complaintColumns } from "../constants";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [complaints, setComplaints] = useState([]);
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
   const display = useMemo(() => {
     return complaints.filter((x) =>
       x.description.toLowerCase().includes(query)
@@ -24,6 +27,13 @@ function Dashboard() {
 
   const handleChange = (event) => {
     setQuery(event.target.value);
+  };
+
+  const handleClick = (params) => {
+    const {
+      row: { id },
+    } = params;
+    navigate(`/view/${id}`);
   };
 
   useEffect(() => {
@@ -63,6 +73,7 @@ function Dashboard() {
         {complaints.length > 0 && (
           <DataGrid
             columns={complaintColumns}
+            onRowClick={handleClick}
             rows={query == "" ? complaints : display}
             rowHeight={48}
           />

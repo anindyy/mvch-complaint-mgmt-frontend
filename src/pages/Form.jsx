@@ -6,7 +6,8 @@ import {
   Typography,
   Autocomplete,
   TextField,
-  Button
+  Button,
+  Card,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -18,10 +19,10 @@ class Form extends React.Component {
 
   onUpload = (event) => {
     let sizeInKB = event.target.files[0].size * 0.0009765625;
-    let strSize = `${Number(sizeInKB.toFixed(0))} KB`
+    let strSize = `${Number(sizeInKB.toFixed(0))} KB`;
     if (sizeInKB > 1000) {
-      let sizeInMB = sizeInKB * 0.0009765625
-      strSize = `${Number(sizeInMB.toFixed(2))} MB`
+      let sizeInMB = sizeInKB * 0.0009765625;
+      strSize = `${Number(sizeInMB.toFixed(2))} MB`;
     }
     this.setState({
       fileName: event.target.files[0].name,
@@ -34,70 +35,72 @@ class Form extends React.Component {
     return (
       <Box p={6}>
         <Card sx={{ p: 3 }}>
-        <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
-          <Typography variant="h4">
-            <b>Complaint Form</b>
-          </Typography>
-          <Typography variant="body1" sx={{ pb: 2, textAlign: "left" }}>
-            Please send us details about the incident you would like to report.{" "}
-            <br />
-            We will review and follow up with you as soon as possible.
-          </Typography>
+          <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
+            <Typography variant="h4">
+              <b>Complaint Form</b>
+            </Typography>
+            <Typography variant="body1" sx={{ pb: 2, textAlign: "left" }}>
+              Please send us details about the incident you would like to
+              report. <br />
+              We will review and follow up with you as soon as possible.
+            </Typography>
 
-          <TextField fullWidth label="Email" />
-          <Typography variant="body2" textAlign="left">
-            Looks like you have filled our form before. <br />
-            <Link variant="body2" color="blue">Should we load your biodata?</Link>
-          </Typography>
+            <TextField fullWidth label="Email" />
+            <Typography variant="body2" textAlign="left">
+              Looks like you have filled our form before. <br />
+              <Link variant="body2" color="blue">
+                Should we load your biodata?
+              </Link>
+            </Typography>
 
-          <Typography variant="h6">
-            <b>Biodata</b>
-          </Typography>
-          <TextField fullWidth label="Full name" />
-          <Stack direction="row" spacing={2}>
-            <TextField fullWidth label="Street Address" />
-            <TextField label="Street Number" />
+            <Typography variant="h6">
+              <b>Biodata</b>
+            </Typography>
+            <TextField fullWidth label="Full name" />
+            <Stack direction="row" spacing={2}>
+              <TextField fullWidth label="Street Address" />
+              <TextField label="Street Number" />
+            </Stack>
+            <Stack direction="row" spacing={2}>
+              <TextField fullWidth label="Phone Number" />
+              <TextField fullWidth label="City" />
+            </Stack>
+            <Stack direction="row" spacing={2}>
+              <TextField fullWidth label="Province/State/District" />
+              <TextField fullWidth label="Country" />
+            </Stack>
+
+            <Typography variant="h6">
+              <b>Complaint Detail</b>
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <Autocomplete
+                disablePortal
+                fullWidth
+                options={["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "b", "c"]}
+                renderInput={(params) => (
+                  <TextField {...params} label="Hospital" />
+                )}
+              />
+              <Autocomplete
+                disablePortal
+                fullWidth
+                options={["a", "b", "c"]}
+                renderInput={(params) => (
+                  <TextField {...params} label="Facility" />
+                )}
+              />
+            </Stack>
+
+            <TextField fullWidth label="TO DO: Date" />
+            <TextField fullWidth multiline rows={4} label="Description" />
+
+            <Button variant="outlined" component="label">
+              Upload File
+              <input type="file" onChange={this.onUpload} hidden />
+            </Button>
+            {!!fileName && `${fileName} (${fileSize})`}
           </Stack>
-          <Stack direction="row" spacing={2}>
-            <TextField fullWidth label="Phone Number" />
-            <TextField fullWidth label="City" />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <TextField fullWidth label="Province/State/District" />
-            <TextField fullWidth label="Country" />
-          </Stack>
-
-          <Typography variant="h6">
-            <b>Complaint Detail</b>
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Autocomplete
-              disablePortal
-              fullWidth
-              options={["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "b", "c"]}
-              renderInput={(params) => (
-                <TextField {...params} label="Hospital" />
-              )}
-            />
-            <Autocomplete
-              disablePortal
-              fullWidth
-              options={["a", "b", "c"]}
-              renderInput={(params) => (
-                <TextField {...params} label="Facility" />
-              )}
-            />
-          </Stack>
-
-          <TextField fullWidth label="TO DO: Date" />
-          <TextField fullWidth multiline rows={4} label="Description" />
-
-          <Button variant="outlined" component="label">
-            Upload File
-            <input type="file" onChange={this.onUpload} hidden />
-          </Button>
-          {!!fileName && `${fileName} (${fileSize})`}
-        </Stack>
         </Card>
       </Box>
     );
