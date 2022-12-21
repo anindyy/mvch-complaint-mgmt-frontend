@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
   const handleLogout = () => {
     setToken(null);
     removeCookie(config.cookieName);
+    navigate("/")
   };
 
   const handleSignup = async (body) => {
@@ -82,20 +83,20 @@ const AuthProvider = ({ children }) => {
 function App() {
   return (
     <>
-      <TopBar />
       <AuthProvider>
-          <div className="App">
-            <Routes>
-              <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-              <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-              <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
-              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-              <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+        <TopBar />
+        <div className="App">
+          <Routes>
+            <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+            <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+            <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+            <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </AuthProvider>
     </>
   );

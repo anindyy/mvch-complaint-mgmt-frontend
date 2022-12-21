@@ -1,20 +1,28 @@
 import React from "react";
 import { useCookies } from "react-cookie";
-import {
-  Stack,
-  Card,
-  Box,
-  Typography,
-  Autocomplete,
-  TextField,
-  Button,
-  Link,
-  Divider,
-} from "@mui/material";
+import { Stack, Box, Typography, Button, Link } from "@mui/material";
 import config from "../config";
+import { logout } from "../api/user";
+import { useAuth } from "../hooks/useAuth";
 
 function TopBar() {
-  const [cookie, setCookie, removeCookie] = useCookies([config.nameCookieName])
+  const { onLogout } = useAuth();
+
+  const [cookie, _, removeCookie] = useCookies([
+    config.nameCookieName,
+    config.cookieName,
+    config.roleCookieName,
+  ]);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      removeCookie(config.nameCookieName);
+      removeCookie(config.roleCookieName);
+      onLogout();
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <Box
       sx={{
@@ -56,18 +64,25 @@ function TopBar() {
         </Link>
       </Stack>
 
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{ display: "flex", alignItems: "center" }}
-      >
-        <Typography variant="body2" color="white">
-          Hello, {cookie[config.nameCookieName]}!
-        </Typography>
-        <Button size="small" variant="text" sx={{ color: "white" }}>
-          Log out
-        </Button>
-      </Stack>
+      {cookie[config.cookieName] && (
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ display: "flex", alignItems: "center" }}
+        >
+          <Typography variant="body2" color="white">
+            Hello, {cookie[config.nameCookieName]}!
+          </Typography>
+          <Button
+            size="small"
+            variant="text"
+            sx={{ color: "white" }}
+            onClick={handleLogout}
+          >
+            Log out
+          </Button>
+        </Stack>
+      )}
     </Box>
   );
 }
