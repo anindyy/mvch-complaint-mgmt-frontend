@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router';
 import { useCookies } from 'react-cookie';
 
-import logo from './logo.svg';
 import './App.css';
 import Home from './pages/Home';
 import Form from './pages/Form';
@@ -13,6 +12,8 @@ import NotFound from './pages/NotFound';
 import Dashboard from './pages/Dashboard';
 import { login, register } from './api/user';
 import config from './config';
+import View from './pages/View';
+import TopBar from './component/TopBar';
 
 export const AuthContext = React.createContext(null)
 
@@ -80,19 +81,23 @@ const AuthProvider = ({ children }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="App">
-        <Routes>
-          <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-          <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-          <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </AuthProvider>
+    <>
+      <TopBar />
+      <AuthProvider>
+          <div className="App">
+            <Routes>
+              <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+              <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+      </AuthProvider>
+    </>
   );
 }
 

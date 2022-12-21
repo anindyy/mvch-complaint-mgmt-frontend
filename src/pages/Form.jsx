@@ -8,6 +8,7 @@ import {
   TextField,
   Button
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 class Form extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Form extends React.Component {
     const { fileName, fileSize } = this.state;
     return (
       <Box p={6}>
+        <Card sx={{ p: 3 }}>
         <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
           <Typography variant="h4">
             <b>Complaint Form</b>
@@ -43,9 +45,9 @@ class Form extends React.Component {
           </Typography>
 
           <TextField fullWidth label="Email" />
-          <Typography variant="body2">
-            Looks like you have filled our form before.
-            <Button variant="text">Should we load your biodata?</Button>
+          <Typography variant="body2" textAlign="left">
+            Looks like you have filled our form before. <br />
+            <Link variant="body2" color="blue">Should we load your biodata?</Link>
           </Typography>
 
           <Typography variant="h6">
@@ -96,6 +98,7 @@ class Form extends React.Component {
           </Button>
           {!!fileName && `${fileName} (${fileSize})`}
         </Stack>
+        </Card>
       </Box>
     );
   }
