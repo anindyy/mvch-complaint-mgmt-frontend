@@ -9,11 +9,12 @@ import Form from './pages/Form';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
-import Dashboard from './pages/Dashboard';
 import { login, register } from './api/user';
 import config from './config';
 import View from './pages/View';
 import TopBar from './component/TopBar';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 export const AuthContext = React.createContext(null)
 
@@ -32,7 +33,7 @@ const ProtectedRoute = ({ isAuthPage = false, children }) => {
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName, config.nameCookieName, config.roleCookieName]);
+  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName]);
   const [token, setToken] = useState(cookie[config.cookieName]);
 
   useEffect(() => {
@@ -43,11 +44,9 @@ const AuthProvider = ({ children }) => {
   })
 
   const handleLogin = async ({ email, password }) => {
-    const { token, name, role } = await login({ email, password })
+    const { token } = await login({ email, password })
     setToken(token);
     setCookie(config.cookieName, token);
-    setCookie(config.roleCookieName, role);
-    setCookie(config.nameCookieName, name);
     navigate('/home');
   };
 
@@ -57,11 +56,9 @@ const AuthProvider = ({ children }) => {
   };
 
   const handleSignup = async (body) => {
-    const { token, role, name } = await register(body);
+    const { token } = await register(body);
     setToken(token);
     setCookie(config.cookieName, token);
-    setCookie(config.roleCookieName, role);
-    setCookie(config.nameCookieName, name);
     navigate('/home');
   }
 
@@ -83,7 +80,8 @@ function App() {
   return (
     <>
       <TopBar />
-      <AuthProvider>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <AuthProvider>
           <div className="App">
             <Routes>
               <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
@@ -92,12 +90,13 @@ function App() {
               <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
               <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
-      </AuthProvider>
+        </AuthProvider>
+      </LocalizationProvider>
     </>
+
   );
 }
 
