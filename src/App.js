@@ -30,7 +30,7 @@ const ProtectedRoute = ({ isAuthPage = false, children }) => {
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName]);
+  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName, config.nameCookieName, config.roleCookieName]);
   const [token, setToken] = useState(cookie[config.cookieName]);
 
   useEffect(() => {
@@ -41,9 +41,11 @@ const AuthProvider = ({ children }) => {
   })
 
   const handleLogin = async ({ email, password }) => {
-    const { token } = await login({ email, password })
+    const { token, name, role } = await login({ email, password })
     setToken(token);
     setCookie(config.cookieName, token);
+    setCookie(config.roleCookieName, role);
+    setCookie(config.nameCookieName, name);
     navigate('/home');
   };
 
@@ -53,9 +55,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const handleSignup = async (body) => {
-    const { token } = await register(body);
+    const { token, role, name } = await register(body);
     setToken(token);
     setCookie(config.cookieName, token);
+    setCookie(config.roleCookieName, role);
+    setCookie(config.nameCookieName, name);
     navigate('/home');
   }
 
