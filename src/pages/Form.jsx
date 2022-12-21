@@ -4,7 +4,6 @@ import {
   Stack,
   Card,
   Box,
-  Container,
   Typography,
   Autocomplete,
   TextField,
@@ -15,6 +14,7 @@ class Form extends React.Component {
   render() {
     return (
       <Box p={6}>
+        <Card sx={{ p: 3 }}>
         <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
           <Typography variant="h4">
             <b>Complaint Form</b>
@@ -78,6 +78,7 @@ class Form extends React.Component {
             <input type="file" hidden />
           </Button>
         </Stack>
+        </Card>
       </Box>
     );
   }

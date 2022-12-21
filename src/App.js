@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router';
 import { useCookies } from 'react-cookie';
 
-import logo from './logo.svg';
 import './App.css';
 import Home from './pages/Home';
 import Form from './pages/Form';
@@ -12,6 +11,7 @@ import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
 import { login, register } from './api/user';
 import config from './config';
+import View from './pages/View';
 
 export const AuthContext = React.createContext(null)
 
@@ -83,6 +83,7 @@ function App() {
           <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+          <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
