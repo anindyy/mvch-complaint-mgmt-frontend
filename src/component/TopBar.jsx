@@ -46,22 +46,26 @@ function TopBar() {
         >
           <b>MVCH Complaint Service</b>
         </Link>
-        <Link
-          variant="body2"
-          href="/dashboard"
-          underline="none"
-          sx={{ color: "white" }}
-        >
-          View all complaints
-        </Link>
-        <Link
-          component="button"
-          variant="body2"
-          underline="none"
-          sx={{ color: "white" }}
-        >
-          View a complaint
-        </Link>
+        {cookie[config.cookieName] && (
+          <>
+            <Link
+              variant="body2"
+              href="/dashboard"
+              underline="none"
+              sx={{ color: "white" }}
+            >
+              View all complaints
+            </Link>
+            <Link
+              component="button"
+              variant="body2"
+              underline="none"
+              sx={{ color: "white" }}
+            >
+              View a complaint
+            </Link>
+          </>
+        )}
       </Stack>
 
       {cookie[config.cookieName] && (
