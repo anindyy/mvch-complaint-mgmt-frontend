@@ -12,7 +12,7 @@ class Home extends React.Component {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="100vh"
+        minHeight="80vh"
       >
         <Stack spacing={2} sx={{ p: 4 }}>
           <Typography variant="h4" sx={{ pb: 2 }}>
