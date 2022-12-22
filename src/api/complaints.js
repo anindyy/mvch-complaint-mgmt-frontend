@@ -17,3 +17,12 @@ export const sendComplaints = async () => {
     console.log(err.message)
   }
 }
+
+export const fetchComplaintById = async (id) => {
+  try {
+    const res = await httpRequest.get(`/complaint/${id}`)
+    return res
+  } catch(err) {
+    console.log(err.message)
+  }
+}

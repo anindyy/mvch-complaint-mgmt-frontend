@@ -14,7 +14,7 @@ import {
   FormGroup,
   FormControlLabel,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
@@ -28,10 +28,10 @@ function Form() {
 
   var onUpload = (event) => {
     let sizeInKB = event.target.files[0].size * 0.0009765625;
-    let strSize = `${Number(sizeInKB.toFixed(0))} KB`
+    let strSize = `${Number(sizeInKB.toFixed(0))} KB`;
     if (sizeInKB > 1000) {
-      let sizeInMB = sizeInKB * 0.0009765625
-      strSize = `${Number(sizeInMB.toFixed(2))} MB`
+      let sizeInMB = sizeInKB * 0.0009765625;
+      strSize = `${Number(sizeInMB.toFixed(2))} MB`;
     }
     setFileName(event.target.files[0].name);
     setFileSize(strSize)
@@ -48,7 +48,6 @@ function Form() {
 
   return (
     <Box display="flex" justifyContent="center">
-      {/* <Box p={6} maxWidth="md"> */}
       <Card sx={{ p: 3, m: 6, minWidth: 'md', maxWidth: 'lg' }}>
         <Stack spacing={2} sx={{ display: "flex", alignItems: "flex-start" }}>
           {/* Title and description */}
@@ -168,7 +167,6 @@ function Form() {
         </Stack>
       </Card>
     </Box>
-    // </Box>
   );
 }
 

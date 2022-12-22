@@ -9,6 +9,7 @@ import Form from './pages/Form';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
 import { login, register } from './api/user';
 import config from './config';
 import View from './pages/View';
@@ -33,7 +34,7 @@ const ProtectedRoute = ({ isAuthPage = false, children }) => {
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName]);
+  const [cookie, setCookie, removeCookie] = useCookies([config.cookieName, config.nameCookieName, config.roleCookieName]);
   const [token, setToken] = useState(cookie[config.cookieName]);
 
   useEffect(() => {
@@ -44,21 +45,26 @@ const AuthProvider = ({ children }) => {
   })
 
   const handleLogin = async ({ email, password }) => {
-    const { token } = await login({ email, password })
+    const { token, name, role } = await login({ email, password })
     setToken(token);
     setCookie(config.cookieName, token);
+    setCookie(config.roleCookieName, role);
+    setCookie(config.nameCookieName, name);
     navigate('/home');
   };
 
   const handleLogout = () => {
     setToken(null);
     removeCookie(config.cookieName);
+    navigate("/")
   };
 
   const handleSignup = async (body) => {
-    const { token } = await register(body);
+    const { token, role, name } = await register(body);
     setToken(token);
     setCookie(config.cookieName, token);
+    setCookie(config.roleCookieName, role);
+    setCookie(config.nameCookieName, name);
     navigate('/home');
   }
 
@@ -79,9 +85,9 @@ const AuthProvider = ({ children }) => {
 function App() {
   return (
     <>
-      <TopBar />
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <AuthProvider>
+          <TopBar />
           <div className="App">
             <Routes>
               <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
@@ -89,7 +95,8 @@ function App() {
               <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
               <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-              <Route path="/view" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

@@ -20,3 +20,12 @@ export const register = async (body) => {
     console.log(err.message)
   }
 }
+
+export const logout = async () => {
+  try {
+    const res = await httpRequest.post('/user/logout')
+    return res.data
+  } catch(err) {
+    console.log(err.message)
+  }
+}
