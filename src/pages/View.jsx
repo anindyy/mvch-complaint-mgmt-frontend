@@ -17,9 +17,21 @@ import {
   MenuItem,
   FormControl,
 } from "@mui/material";
-import { fetchComplaintById, updateComplaintById } from "../api/complaints";
+import {
+  fetchComplaintById,
+  updateComplaintById,
+  updateComplaintReply,
+} from "../api/complaints";
+import { useCookies } from "react-cookie";
+import config from "../config";
 
 function View() {
+  // Cookie
+  const [cookie, x, y] = useCookies([
+    config.nameCookieName,
+    config.roleCookieName,
+  ]);
+
   // Data states
   const { id } = useParams();
   const [status, setStatus] = useState("unresolved".toLowerCase());
@@ -29,11 +41,15 @@ function View() {
   const [newStatus, setNewStatus] = useState("");
   const [complaint, setComplaints] = useState(null);
 
+  // Reply states
+  const [content, setContent] = useState("");
+
   const fetch = async () => {
     try {
       const { data } = await fetchComplaintById(id);
       setComplaints(data.response);
       setStatus(data.response.status);
+      setNewStatus(data.response.status);
     } catch (err) {
       console.log(err.message);
     }
@@ -63,6 +79,22 @@ function View() {
       await updateComplaintById({ id, status: newStatus });
       setStatus(newStatus);
       setDialogue(false);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleReply = (event) => {
+    setContent(event.target.value);
+  };
+
+  const sendReply = async () => {
+    try {
+      const senderRole = cookie[config.roleCookieName];
+      const senderName = cookie[config.nameCookieName];
+      setContent("");
+      await updateComplaintReply({ id, content, senderName, senderRole });
+      await fetch();
     } catch (err) {
       console.log(err.message);
     }
@@ -208,10 +240,17 @@ function View() {
                   fullWidth
                   rows={2}
                   placeholder="Write a reply"
+                  value={content}
+                  onChange={handleReply}
                 />
               </Card>
             </Box>
-            <Button variant="contained" sx={{ p: 1, alignSelf: "flex-end" }}>
+            <Button
+              variant="contained"
+              sx={{ p: 1, alignSelf: "flex-end" }}
+              disabled={content.length == 0}
+              onClick={sendReply}
+            >
               Reply
             </Button>
           </Stack>

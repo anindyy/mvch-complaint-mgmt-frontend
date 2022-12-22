@@ -35,3 +35,12 @@ export const updateComplaintById = async ({ id, status }) => {
     console.log(err.message)
   }
 }
+
+export const updateComplaintReply = async ({ id, content, senderRole, senderName }) => {
+  try {
+    const res = await httpRequest.put(`/complaint/reply/${id}`, { content, senderRole, senderName })
+    return res
+  } catch (err) {
+    console.log(err.message)
+  }
+}
