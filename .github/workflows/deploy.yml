@@ -17,7 +17,7 @@ jobs:
         with:
           HOST: 34.170.187.186
           USERNAME: ariefpurnamamuharram
-          KEY: -----BEGIN OPENSSH PRIVATE KEY-----
+          KEY: "-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAYEA5v0ngmGjY1hYfbpPypebzhdq/DEXnSD4IL3Cl1Mci3Ke/VVbDHeD
 Flb3uc2CzGC8VfKxYUU3Ge40FKdWQddPHBfUemd1YHWl+KycNWDG9DkoNlJP7ySAmI6ewm
@@ -55,6 +55,7 @@ GNxoAS9QuW4x3lcUbvXHfM90BJDA0QEGayfKTIUgXqDKCZL8sqHvyTvlzilWYWYqchC7st
 xSWVT1TKQanyucPXTpYw2QvEwbn0qy+m/kVKt8kPUpER1hfnS7n/H1m/4Vnhhad0ONTGWZ
 +bPhO871UFAeEAAAAtYXJpZWZwdXJuYW1hbXVoYXJyYW1AQXJpZWZzLU1hY0Jvb2stQWly
 LmxvY2FsAQIDBAUG
------END OPENSSH PRIVATE KEY-----
+-----END OPENSSH PRIVATE KEY-----"
+
           script: |
             cd 
