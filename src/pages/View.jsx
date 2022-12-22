@@ -17,7 +17,7 @@ import {
   MenuItem,
   FormControl,
 } from "@mui/material";
-import { fetchComplaintById } from "../api/complaints";
+import { fetchComplaintById, updateComplaintById } from "../api/complaints";
 
 function View() {
   // Data states
@@ -33,6 +33,7 @@ function View() {
     try {
       const { data } = await fetchComplaintById(id);
       setComplaints(data.response);
+      setStatus(data.response.status);
     } catch (err) {
       console.log(err.message);
     }
@@ -57,9 +58,14 @@ function View() {
     setNewStatus(event.target.value);
   };
 
-  const handleSubmitStatus = () => {
-    setStatus(newStatus);
-    setDialogue(false);
+  const handleSubmitStatus = async () => {
+    try {
+      await updateComplaintById({ id, status: newStatus });
+      setStatus(newStatus);
+      setDialogue(false);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   if (!!complaint) {
