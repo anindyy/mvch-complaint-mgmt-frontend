@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import moment from "moment/moment";
 import { fetchHospitals } from "../api/hospital";
+import { sendComplaints } from "../api/complaints";
 
 function Form() {
   // Hospital response
@@ -82,6 +83,22 @@ function Form() {
         break;
       }
     }
+  }
+
+  var handleSubmit = () => {
+    var nameAffected = selfAffected === "yes" ? fullName : affectedPerson;
+    var currentTime = Date.now();
+    sendComplaints({
+      nameAffected: nameAffected,
+      sender: fullName,
+      hospitalName: hospital,
+      facility: facility,
+      createdAt: currentTime,
+      description: description,
+      files: 'file',
+      status: 'unresolved',
+      type: 'other'
+    })
   }
 
   return (
@@ -183,10 +200,10 @@ function Form() {
             <RadioGroup row
               value={selfAffected}
               onChange={(event) => {setSelfAffected(event.target.value)}}>
-              <FormControlLabel value="self" control={<Radio />} label="I experienced this myself" />
-              <FormControlLabel value="other" control={<Radio />} label="Other people experienced this" />
+              <FormControlLabel value="yes" control={<Radio />} label="I experienced this myself" />
+              <FormControlLabel value="no" control={<Radio />} label="Other people experienced this" />
             </RadioGroup>
-            {selfAffected === "other" &&
+            {selfAffected === "no" &&
               <TextField fullWidth size="small" label="Affected people name" onChange={(event) => {setAffectedPerson(event.target.value)}} />}
           </FormControl>
 
@@ -204,7 +221,7 @@ function Form() {
           {!!fileName && `${fileName} (${fileSize})`}
 
           {/* Submit button */}
-          <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3 }}>
+          <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3 }} onClick={handleSubmit}>
             Submit
           </Button>
         </Stack>
