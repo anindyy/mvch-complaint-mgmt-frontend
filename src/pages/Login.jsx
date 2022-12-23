@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Typography, TextField, Container, Box } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
+import { Stack } from "@mui/system";
 
 function Login() {
 
@@ -47,9 +48,14 @@ function Login() {
             id="password"
             margin="normal"
           />
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-            SIGN IN
-          </Button>
+          <Stack>
+            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Sign in
+            </Button>
+            <Button href="/signup" variant="text" sx={{ mt: 3, mb: 2 }}>
+              Create an account
+            </Button>
+          </Stack>
         </Box>
       </Box>
     </Container>

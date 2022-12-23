@@ -47,7 +47,7 @@ class Home extends React.Component {
             </Stack>
           </Card>
 
-          <Typography variant="overline" display="block">
+          <Typography variant="overline" display="block" textAlign="center">
             -- or --
           </Typography>
 

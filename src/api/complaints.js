@@ -9,9 +9,32 @@ export const fetchAllComplaints = async () => {
   }
 }
 
-export const sendComplaints = async () => {
+export const sendComplaints = async ({
+  nameAffected,
+  sender,
+  selfAffected,
+  hospitalName,
+  facility,
+  createdAt,
+  description,
+  files,
+  status,
+  type
+}) => {
   try {
-    const res = await httpRequest.post('/complaint')
+    const res = await httpRequest.post('/complaint', {
+      nameAffected,
+      sender,
+      selfAffected,
+      hospitalName,
+      facility,
+      createdAt,
+      description,
+      files,
+      complainReplies: [],
+      status,
+      type
+    })
     return res
   } catch (err) {
     console.log(err.message)

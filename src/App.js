@@ -14,6 +14,8 @@ import { login, register } from './api/user';
 import config from './config';
 import View from './pages/View';
 import TopBar from './component/TopBar';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 export const AuthContext = React.createContext(null)
 
@@ -83,22 +85,25 @@ const AuthProvider = ({ children }) => {
 function App() {
   return (
     <>
-      <AuthProvider>
-        <TopBar />
-        <div className="App">
-          <Routes>
-            <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-            <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
-            <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
-            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-            <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </AuthProvider>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <AuthProvider>
+          <TopBar />
+          <div className="App">
+            <Routes>
+              <Route index element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/login" element={<ProtectedRoute isAuthPage><Login /></ProtectedRoute>} />
+              <Route path="/signup" element={<ProtectedRoute isAuthPage><Signup /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+              <Route path="/view/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+        </AuthProvider>
+      </LocalizationProvider>
     </>
+
   );
 }
 
