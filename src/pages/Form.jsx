@@ -16,13 +16,15 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import moment from "moment/moment";
 import { fetchHospitals } from "../api/hospital";
 import { sendComplaints } from "../api/complaints";
 
 function Form() {
+  const [submitId, setSubmitId] = useState(false);
+
   // Hospital response
   const [hospitalResponse, setHospitalResponse] = useState([]);
   const [hospitalList, setHospitalList] = useState([]);
@@ -85,10 +87,10 @@ function Form() {
     }
   }
 
-  var handleSubmit = () => {
+  var handleSubmit = async () => {
     var nameAffected = selfAffected === "yes" ? fullName : affectedPerson;
     var currentTime = Date.now();
-    sendComplaints({
+    var { data } = await sendComplaints({
       nameAffected: nameAffected,
       sender: fullName,
       hospitalName: hospital,
@@ -99,6 +101,7 @@ function Form() {
       status: 'unresolved',
       type: 'other'
     })
+    setSubmitId(data.response._id);
   }
 
   return (
@@ -115,7 +118,7 @@ function Form() {
           </Typography>
 
           {/* Email */}
-          <TextField fullWidth label="Email" onChange={(event) => { setEmail(event.target.value) }} />
+          <TextField required fullWidth label="Email" onChange={(event) => { setEmail(event.target.value) }} />
           <Typography variant="body2" textAlign="left">
             Looks like you have filled our form before. <br />
             <Link variant="body2" color="blue">Should we load your biodata?</Link>
@@ -125,7 +128,7 @@ function Form() {
           <Typography variant="h6">
             <b>Biodata</b>
           </Typography>
-          <TextField fullWidth label="Full name" onChange={(event) => { setFullName(event.target.value) }} />
+          <TextField required fullWidth label="Full name" onChange={(event) => { setFullName(event.target.value) }} />
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
               <TextField fullWidth label="Street Address" onChange={(event) => { setAddress(event.target.value) }} />
@@ -157,8 +160,9 @@ function Form() {
           </Typography>
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <FormControl fullWidth >
+              <FormControl fullWidth required>
                 <Autocomplete
+                  
                   value={hospital}
                   onChange={handleHospitalChange}
                   disablePortal
@@ -194,7 +198,7 @@ function Form() {
             renderInput={(params) => <TextField {...params} />}
           />
 
-          <TextField fullWidth multiline rows={4} label="Description" onChange={(event) => {setDescripton(event.target.value)}} />
+          <TextField fullWidth multiline required rows={4} label="Description" onChange={(event) => {setDescripton(event.target.value)}} />
 
           <FormControl>
             <RadioGroup row
@@ -224,6 +228,7 @@ function Form() {
           <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3 }} onClick={handleSubmit}>
             Submit
           </Button>
+          { submitId &&  <Navigate to={`/view/${submitId}`} replace={true} />}
         </Stack>
       </Card>
     </Box>

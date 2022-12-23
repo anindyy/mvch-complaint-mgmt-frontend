@@ -128,26 +128,22 @@ function View() {
             </Box>
 
             {/* Complaint Detail */}
-            <Stack
-              spacing={1}
-              sx={{ display: "flex", alignItems: "flex-start" }}
+            <Box
+              sx={{ display: "flex", flexDirection: "column", 
+              alignItems: "flex-start", width: "100%" }}
             >
               <Typography variant="body2">
                 {complaint.sender} / {complaint.createdAt}
               </Typography>
-              <Grid container justify="space-between" alignItems="stretch">
-                <Grid item xs sx={{ display: "flex", flexDirection: "column" }}>
+              <Box display="flex" sx={{ width: "100%" }}>
+                <Box display="flex" flexDirection="column" width="100%">
                   <Card sx={{ p: 3, mr: 2, textAlign: "left", height: "100%" }}>
                     <Typography variant="body1">
                       {complaint.description}
                     </Typography>
                   </Card>
-                </Grid>
-                <Grid
-                  item
-                  xs="auto"
-                  sx={{ display: "flex", flexDirection: "column" }}
-                >
+                </Box>
+                <Box display="flex" flexDirection="column">
                   <Card sx={{ p: 3, textAlign: "left", height: "100%" }}>
                     <Typography variant="body1">
                       <b>Report status: </b>
@@ -185,16 +181,16 @@ function View() {
                       <b>Files:</b> <br />
                     </Typography>
                   </Card>
-                </Grid>
-              </Grid>
-            </Stack>
+                </Box>
+              </Box>
+            </Box>
 
             {/* Replies */}
             <Typography variant="h6">
               <b>Replies</b>
             </Typography>
             {complaint.complainReplies &&
-            complaint.complainReplies.length > 0 ? (
+              complaint.complainReplies.length > 0 ? (
               <Grid container sx={{ display: "flex", width: "100%" }}>
                 {complaint.complainReplies.map((reply) => (
                   <Grid
