@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Stack,
@@ -19,12 +19,47 @@ import {
 import { Link } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import moment from "moment/moment";
+import { fetchHospitals } from "../api/hospital";
 
 function Form() {
+  // Hospital response
+  const [hospitalResponse, setHospitalResponse] = useState([]);
+  const [hospitalList, setHospitalList] = useState([]);
+  const [facilityList, setFacilityList] = useState([]);
+
+  // Data columns
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressNum, setAddressNum] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+  const [country, setCountry] = useState("");
+  const [hospital, setHospital] = useState("");
+  const [facility, setFacility] = useState("");
   const [dateValue, setDateValue] = useState(moment().format());
+  const [description, setDescripton] = useState("");
+  const [selfAffected, setSelfAffected] = useState("");
+  const [affectedPerson, setAffectedPerson] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileSize, setFileSize] = useState("");
-  const [selfAffected, setSelfAffected] = useState("");
+
+  // Fetch hospital data
+  useEffect(() => {
+    fetch();
+  }, [])
+
+  const fetch = async () => {
+    try {
+      const data = await fetchHospitals();
+      const hospitalListReponse = data.response;
+      setHospitalResponse(data.response);
+      setHospitalList(hospitalListReponse.map(({name}) => name));
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   var onUpload = (event) => {
     let sizeInKB = event.target.files[0].size * 0.0009765625;
@@ -37,13 +72,16 @@ function Form() {
     setFileSize(strSize)
   };
 
-  var handleDateChange = () => {
-
-  }
-
-  var handleSelfAffectedChange = (event) => {
-    console.log(event.target.value)
-    setSelfAffected(event.target.value);
+  var handleHospitalChange = (event, newValue) => {
+    const newHospital = newValue;
+    setHospital(newHospital);
+    setFacility("");
+      for (var i in hospitalResponse) {
+      if (hospitalResponse[i]["name"] === newHospital) {
+        setFacilityList(hospitalResponse[i]["facilities"]);
+        break;
+      }
+    }
   }
 
   return (
@@ -60,7 +98,7 @@ function Form() {
           </Typography>
 
           {/* Email */}
-          <TextField fullWidth label="Email" />
+          <TextField fullWidth label="Email" onChange={(event) => { setEmail(event.target.value) }} />
           <Typography variant="body2" textAlign="left">
             Looks like you have filled our form before. <br />
             <Link variant="body2" color="blue">Should we load your biodata?</Link>
@@ -70,29 +108,29 @@ function Form() {
           <Typography variant="h6">
             <b>Biodata</b>
           </Typography>
-          <TextField fullWidth label="Full name" />
+          <TextField fullWidth label="Full name" onChange={(event) => { setFullName(event.target.value) }} />
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <TextField fullWidth label="Street Address" />
+              <TextField fullWidth label="Street Address" onChange={(event) => { setAddress(event.target.value) }} />
             </Grid>
             <Grid item xs={1.5}>
-              <TextField fullWidth label="Street No" />
+              <TextField fullWidth label="Street No" onChange={(event) => { setAddressNum(event.target.value) }} />
             </Grid>
           </Grid>
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <TextField fullWidth label="Phone Number" />
+              <TextField fullWidth label="Phone Number" onChange={(event) => { setPhone(event.target.value) }} />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth label="City" />
+              <TextField fullWidth label="City" onChange={(event) => { setCity(event.target.value) }} />
             </Grid>
           </Grid>
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <TextField fullWidth label="Province/State/District" />
+              <TextField fullWidth label="Province/State/District" onChange={(event) => { setProvince(event.target.value) }} />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth label="Country" />
+              <TextField fullWidth label="Country" onChange={(event) => { setCountry(event.target.value) }} />
             </Grid>
           </Grid>
 
@@ -102,11 +140,13 @@ function Form() {
           </Typography>
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <FormControl fullWidth>
+              <FormControl fullWidth >
                 <Autocomplete
+                  value={hospital}
+                  onChange={handleHospitalChange}
                   disablePortal
                   fullWidth
-                  options={["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "b", "c"]}
+                  options={hospitalList}
                   renderInput={(params) => (
                     <TextField {...params} label="Hospital" />
                   )}
@@ -116,9 +156,11 @@ function Form() {
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <Autocomplete
+                  value={facility}
+                  onChange={(event, newValue) => { setFacility(newValue) }}
                   disablePortal
                   fullWidth
-                  options={["a", "b", "c"]}
+                  options={facilityList}
                   renderInput={(params) => (
                     <TextField {...params} label="Facility" />
                   )}
@@ -131,20 +173,21 @@ function Form() {
             label="Incident Date"
             inputFormat="DD/MM/YYYY"
             value={dateValue}
-            onChange={handleDateChange}
+            onChange={(newDate) => {setDateValue(newDate)}}
             renderInput={(params) => <TextField {...params} />}
           />
 
-          <TextField fullWidth multiline rows={4} label="Description" />
+          <TextField fullWidth multiline rows={4} label="Description" onChange={(event) => {setDescripton(event.target.value)}} />
 
           <FormControl>
             <RadioGroup row
               value={selfAffected}
-              onChange={handleSelfAffectedChange}>
+              onChange={(event) => {setSelfAffected(event.target.value)}}>
               <FormControlLabel value="self" control={<Radio />} label="I experienced this myself" />
               <FormControlLabel value="other" control={<Radio />} label="Other people experienced this" />
             </RadioGroup>
-            {selfAffected === "other" && <TextField fullWidth size="small" label="Affected people name" />}
+            {selfAffected === "other" &&
+              <TextField fullWidth size="small" label="Affected people name" onChange={(event) => {setAffectedPerson(event.target.value)}} />}
           </FormControl>
 
           {/* Upload files */}
@@ -161,7 +204,7 @@ function Form() {
           {!!fileName && `${fileName} (${fileSize})`}
 
           {/* Submit button */}
-          <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3}}>
+          <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3 }}>
             Submit
           </Button>
         </Stack>
