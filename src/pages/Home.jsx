@@ -62,7 +62,7 @@ class Home extends React.Component {
                 onChange={this.onIdChange}
               />
               <Button
-                disabled={viewId.length == 0}
+                disabled={viewId.length === 0}
                 variant="contained"
                 onClick={this.handleViewClick}
               >

@@ -74,7 +74,7 @@ function Dashboard() {
           <DataGrid
             columns={complaintColumns}
             onRowClick={handleClick}
-            rows={query == "" ? complaints : display}
+            rows={query === "" ? complaints : display}
             rowHeight={48}
           />
         )}

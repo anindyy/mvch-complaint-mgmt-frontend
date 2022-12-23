@@ -16,13 +16,15 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import moment from "moment/moment";
 import { fetchHospitals } from "../api/hospital";
 import { sendComplaints } from "../api/complaints";
 
 function Form() {
+  const [submitId, setSubmitId] = useState(false);
+
   // Hospital response
   const [hospitalResponse, setHospitalResponse] = useState([]);
   const [hospitalList, setHospitalList] = useState([]);
@@ -43,7 +45,10 @@ function Form() {
   const [description, setDescripton] = useState("");
   const [selfAffected, setSelfAffected] = useState("");
   const [affectedPerson, setAffectedPerson] = useState("");
+
+  // File
   const [fileName, setFileName] = useState("");
+  const [fileBytes, setFileBytes] = useState("");
   const [fileSize, setFileSize] = useState("");
 
   // Fetch hospital data
@@ -56,13 +61,13 @@ function Form() {
       const data = await fetchHospitals();
       const hospitalListReponse = data.response;
       setHospitalResponse(data.response);
-      setHospitalList(hospitalListReponse.map(({name}) => name));
+      setHospitalList(hospitalListReponse.map(({ name }) => name));
     } catch (err) {
       console.log(err);
     }
   }
 
-  var onUpload = (event) => {
+  var onUpload = async (event) => {
     let sizeInKB = event.target.files[0].size * 0.0009765625;
     let strSize = `${Number(sizeInKB.toFixed(0))} KB`;
     if (sizeInKB > 1000) {
@@ -71,13 +76,34 @@ function Form() {
     }
     setFileName(event.target.files[0].name);
     setFileSize(strSize)
+
+    var bytes = await readFileDataAsBase64(event);
+    setFileBytes(event.target.files[0]);
   };
+
+  const readFileDataAsBase64 = (e) => {
+    const file = e.target.files[0];
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+
+      reader.onerror = (err) => {
+        reject(err);
+      };
+
+      reader.readAsBinaryString(file);
+    });
+  }
 
   var handleHospitalChange = (event, newValue) => {
     const newHospital = newValue;
     setHospital(newHospital);
     setFacility("");
-      for (var i in hospitalResponse) {
+    for (var i in hospitalResponse) {
       if (hospitalResponse[i]["name"] === newHospital) {
         setFacilityList(hospitalResponse[i]["facilities"]);
         break;
@@ -85,20 +111,21 @@ function Form() {
     }
   }
 
-  var handleSubmit = () => {
+  var handleSubmit = async () => {
     var nameAffected = selfAffected === "yes" ? fullName : affectedPerson;
     var currentTime = Date.now();
-    sendComplaints({
+    var { data } = await sendComplaints({
       nameAffected: nameAffected,
       sender: fullName,
       hospitalName: hospital,
       facility: facility,
       createdAt: currentTime,
       description: description,
-      files: 'file',
+      files: fileName,
       status: 'unresolved',
       type: 'other'
     })
+    setSubmitId(data.response._id);
   }
 
   return (
@@ -115,17 +142,13 @@ function Form() {
           </Typography>
 
           {/* Email */}
-          <TextField fullWidth label="Email" onChange={(event) => { setEmail(event.target.value) }} />
-          <Typography variant="body2" textAlign="left">
-            Looks like you have filled our form before. <br />
-            <Link variant="body2" color="blue">Should we load your biodata?</Link>
-          </Typography>
+          <TextField required fullWidth label="Email" onChange={(event) => { setEmail(event.target.value) }} />
 
           {/* Biodata */}
           <Typography variant="h6">
             <b>Biodata</b>
           </Typography>
-          <TextField fullWidth label="Full name" onChange={(event) => { setFullName(event.target.value) }} />
+          <TextField required fullWidth label="Full name" onChange={(event) => { setFullName(event.target.value) }} />
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
               <TextField fullWidth label="Street Address" onChange={(event) => { setAddress(event.target.value) }} />
@@ -157,8 +180,9 @@ function Form() {
           </Typography>
           <Grid container>
             <Grid item xs sx={{ mr: 2 }}>
-              <FormControl fullWidth >
+              <FormControl fullWidth required>
                 <Autocomplete
+
                   value={hospital}
                   onChange={handleHospitalChange}
                   disablePortal
@@ -190,21 +214,21 @@ function Form() {
             label="Incident Date"
             inputFormat="DD/MM/YYYY"
             value={dateValue}
-            onChange={(newDate) => {setDateValue(newDate)}}
+            onChange={(newDate) => { setDateValue(newDate) }}
             renderInput={(params) => <TextField {...params} />}
           />
 
-          <TextField fullWidth multiline rows={4} label="Description" onChange={(event) => {setDescripton(event.target.value)}} />
+          <TextField fullWidth multiline required rows={4} label="Description" onChange={(event) => { setDescripton(event.target.value) }} />
 
           <FormControl>
             <RadioGroup row
               value={selfAffected}
-              onChange={(event) => {setSelfAffected(event.target.value)}}>
+              onChange={(event) => { setSelfAffected(event.target.value) }}>
               <FormControlLabel value="yes" control={<Radio />} label="I experienced this myself" />
               <FormControlLabel value="no" control={<Radio />} label="Other people experienced this" />
             </RadioGroup>
             {selfAffected === "no" &&
-              <TextField fullWidth size="small" label="Affected people name" onChange={(event) => {setAffectedPerson(event.target.value)}} />}
+              <TextField fullWidth size="small" label="Affected people name" onChange={(event) => { setAffectedPerson(event.target.value) }} />}
           </FormControl>
 
           {/* Upload files */}
@@ -219,11 +243,18 @@ function Form() {
             <input type="file" onChange={onUpload} hidden />
           </Button>
           {!!fileName && `${fileName} (${fileSize})`}
+          {!!fileName &&
+            <Typography variant="caption">
+              Unfortunately, our file uploading system has a problem. You still can submit the file, {" "}
+              <Typography variant="caption" sx={{ color: "red" }}><b>but it won't be available on the server</b></Typography>.
+              <br /> We apologize for the inconvenience.
+            </Typography>}
 
           {/* Submit button */}
           <Button variant="contained" sx={{ alignSelf: "flex-end", py: 1.5, px: 3 }} onClick={handleSubmit}>
             Submit
           </Button>
+          {submitId && <Navigate to={`/view/${submitId}`} replace={true} />}
         </Stack>
       </Card>
     </Box>

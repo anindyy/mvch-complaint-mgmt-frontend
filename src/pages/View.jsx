@@ -50,6 +50,7 @@ function View() {
       setComplaints(data.response);
       setStatus(data.response.status);
       setNewStatus(data.response.status);
+      console.log(data.response);
     } catch (err) {
       console.log(err.message);
     }
@@ -118,36 +119,37 @@ function View() {
               <Typography variant="h4">
                 <b>Complaint #{complaint._id}</b>
               </Typography>
-              <Button
-                size="small"
-                variant="contained"
-                onClick={() => setDialogue(true)}
-              >
-                Update report status
-              </Button>
+              {
+                cookie[config.cookieName] === "ADMIN" &&
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => setDialogue(true)}
+                >
+                  Update report status
+                </Button>
+              }
             </Box>
 
             {/* Complaint Detail */}
-            <Stack
-              spacing={1}
-              sx={{ display: "flex", alignItems: "flex-start" }}
+            <Box
+              sx={{
+                display: "flex", flexDirection: "column",
+                alignItems: "flex-start", width: "100%"
+              }}
             >
               <Typography variant="body2">
                 {complaint.sender} / {complaint.createdAt}
               </Typography>
-              <Grid container justify="space-between" alignItems="stretch">
-                <Grid item xs sx={{ display: "flex", flexDirection: "column" }}>
+              <Box display="flex" sx={{ width: "100%" }}>
+                <Box display="flex" flexDirection="column" width="100%">
                   <Card sx={{ p: 3, mr: 2, textAlign: "left", height: "100%" }}>
                     <Typography variant="body1">
                       {complaint.description}
                     </Typography>
                   </Card>
-                </Grid>
-                <Grid
-                  item
-                  xs="auto"
-                  sx={{ display: "flex", flexDirection: "column" }}
-                >
+                </Box>
+                <Box display="flex" flexDirection="column">
                   <Card sx={{ p: 3, textAlign: "left", height: "100%" }}>
                     <Typography variant="body1">
                       <b>Report status: </b>
@@ -178,23 +180,24 @@ function View() {
                     <Typography variant="body1">
                       <b>Affected party:</b> <br />
                       {complaint.nameAffected}{" "}
-                      {complaint.selfAffected == "yes" && "(self-affected)"}
+                      {complaint.selfAffected === "yes" && "(self-affected)"}
                     </Typography>
                     <br />
                     <Typography variant="body1">
-                      <b>Files:</b> <br />
+                      <b>File:</b> 
+                      <br /> 
                     </Typography>
                   </Card>
-                </Grid>
-              </Grid>
-            </Stack>
+                </Box>
+              </Box>
+            </Box>
 
             {/* Replies */}
             <Typography variant="h6">
               <b>Replies</b>
             </Typography>
             {complaint.complainReplies &&
-            complaint.complainReplies.length > 0 ? (
+              complaint.complainReplies.length > 0 ? (
               <Grid container sx={{ display: "flex", width: "100%" }}>
                 {complaint.complainReplies.map((reply) => (
                   <Grid
@@ -204,7 +207,15 @@ function View() {
                     sx={{ display: "flex", flexDirection: "column" }}
                   >
                     <Typography variant="body2" alignSelf="flex-start">
-                      {reply.senderName} / {reply.createdAt}
+                      {reply.senderName} / {reply.createdAt} {" "}
+                      {
+                        reply.senderRole === 'ADMIN' &&
+                        <Chip
+                          color="primary"
+                          label="Admin"
+                          size="small"
+                        />
+                      }
                     </Typography>
                     <Box
                       sx={{
@@ -248,7 +259,7 @@ function View() {
             <Button
               variant="contained"
               sx={{ p: 1, alignSelf: "flex-end" }}
-              disabled={content.length == 0}
+              disabled={content.length === 0}
               onClick={sendReply}
             >
               Reply

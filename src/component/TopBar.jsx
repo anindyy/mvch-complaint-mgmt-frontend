@@ -141,7 +141,7 @@ function TopBar() {
               onChange={onIdChange}
             />
             <Button
-              disabled={viewId.length == 0}
+              disabled={viewId.length === 0}
               variant="contained"
               onClick={handleViewClick}
             >
