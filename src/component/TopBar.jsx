@@ -44,7 +44,6 @@ function TopBar() {
       console.log(err.message);
     }
   };
-
   return (
     <>
       <Box
@@ -150,7 +149,7 @@ function TopBar() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => {setDialogue(false)}}
+              onClick={() => { setDialogue(false) }}
             >
               Cancel
             </Button>
